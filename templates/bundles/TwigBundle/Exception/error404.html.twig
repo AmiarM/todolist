@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block  title %} Page Not Found {% endblock%}
+{% block body%}
+<section id="tricks" class="projects-section bg-light mt-5">
+    <div class="container">
+        <div class="row row justify-content-md-center">
+            <div class="col-12 col-sm-12">
+                <div id="error-box">
+                    <div class="row">
+                        <div class="col-12 col-sm-12">
+                            <div id="error-box-inner">
+                                <img src="{{asset('img/error-404-v3.png')}}" alt="Have you seen this page?" />
+                            </div>
+                            <h1>ERROR 404</h1>
+                            <p>
+                                Page not found.<br />
+                                If you find this page, let us know.
+                            </p>
+                            <p>
+                                Go back to <a href="{{path('homepage')}}"><i fa fa-home></i> homepage</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

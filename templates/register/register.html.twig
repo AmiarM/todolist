@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block header_title %}<h1>Créer un utilisateur</h1>{% endblock %}
+{% block header_img %}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        {{ form_start(form, {'action' : path('user_register')}) }}
+            {{ include('user/_form.html.twig') }}
+            <br><br><br>
+            <button type="submit" class="btn btn-success pull-right">Ajouter</button>
+        {{ form_end(form,{'render_rest': false}) }}
+    </div>
+{% endblock %}
