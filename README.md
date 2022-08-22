@@ -4,6 +4,7 @@ une application permettant de gérer ses tâches quotidiennes d'une entreprise
 installer le rgestionnaire de dépendances Composer
 https://getcomposer.org/download/
 ```
+```
 installer la CLI de symfony
 https://symfony.com/download
 ```
