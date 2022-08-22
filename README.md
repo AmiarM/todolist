@@ -13,9 +13,9 @@ installer Git
 https://getcomposer.org/download/
 ```
 ```
-  cloner le projet
-  - git clone https://github.com/AmiarM/bilemo_api.git ou  
-  - télécharger l'archive
+cloner le projet
+- git clone https://github.com/AmiarM/bilemo_api.git ou  
+- télécharger l'archive
 ```
 ```
 installer les différentes dépendances du projet
