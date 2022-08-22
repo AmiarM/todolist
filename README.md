@@ -14,7 +14,6 @@ https://getcomposer.org/download/
 CD bilemo_api
 composer install
 ```
-# configuration de l'application 
   # modifier le ficher .env pour ajuster les valeurs:
   - **DATABASE_URL** pour l'accès à la base de données 
   
