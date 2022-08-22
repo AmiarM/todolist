@@ -6,8 +6,13 @@
 {% block body %}
 {{ form_start(form, {'action' : path('user_edit', {'id' : user.id})}) }}
     <div class="row">
-        {{ include('user/_form.html.twig') }}
+        {{ form_label(form.username) }}
+        {{ form_widget(form.username) }}
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email) }}
+        {{ form_label(form.roles) }}
+        {{ form_widget(form.roles) }}
         <button type="submit" class="btn btn-success pull-right">modifier</button>
     </div>
-{{ form_end(form, {'render_rest': false}) }}
+{{ form_end(form)}}
 {% endblock %}

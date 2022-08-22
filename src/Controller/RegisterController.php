@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class RegiterController extends AbstractController
+class RegisterController extends AbstractController
 {
 
     /**
@@ -26,7 +26,7 @@ class RegiterController extends AbstractController
         $this->manager = $manager;
     }
     /**
-     * @Route("/register", name="user_register")
+     * @Route(path="/register", name="user_register")
      */
     public function createAction(Request $request, UserPasswordHasherInterface $encoder)
     {

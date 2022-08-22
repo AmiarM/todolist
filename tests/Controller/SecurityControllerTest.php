@@ -2,81 +2,33 @@
 
 namespace App\Tests\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-class SecurityControllerTest extends WebTestCase
+class SecurityControllerTest extends  WebTestCase
 {
-    private $client;
-
-    protected function setUp(): void
+    public function testLoginWithBadCredentials()
     {
-        $this->client = self::createClient();
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/login_check');
+        $form = $crawler->selectButton('Se connecter')->form([
+            'email' => 'test@test.fr',
+            'password' => 'fakepassword'
+        ]);
+        $client->submit($form);
+        $this->assertResponseRedirects('/login_check');
+        $client->followRedirect();
+        $this->assertSelectorExists('.alert.alert-danger');
     }
-
-    public function testLogin(): void
+    public function testSuccessfullLogin()
     {
-
-        $crawler = $this->client->request('GET', '/login');
-
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-
-        $this->assertEquals(1, $crawler->filter('input[name="username"]')->count());
-        $this->assertEquals(1, $crawler->filter('input[name="password"]')->count());
-        $this->assertEquals(1, $crawler->filter('input[name="_csrf_token"]')->count());
-
-        $form = $crawler->selectButton('Se connecter')->form();
-
-        $form['username'] = 'admin';
-        $form['password'] = 'root';
-        $this->client->submit($form);
-
-        $crawler = $this->client->followRedirect();
-
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-
-        $this->assertSame('Se déconnecter', $crawler->filter('a.pull-right.btn.btn-danger')->text());
+        $client = static::createClient();
+        $csrfToken = static::getContainer()->get(CsrfTokenManagerInterface::class)->getToken('authenticate');
+        $client->request('POST', '/login_check', [
+            '_csrf_token' => $csrfToken,
+            'email' => 'admin@admin.com',
+            'password' => 'password'
+        ]);
+        $this->assertResponseRedirects('/');
     }
-
-    public function testLoginUsernameDontExist(): void
-    {
-        $crawler = $this->client->request('GET', '/login');
-
-        $form = $crawler->selectButton('Se connecter')->form();
-
-        $form['username'] = 'boby';
-        $form['password'] = '';
-        $this->client->submit($form);
-
-        $crawler = $this->client->followRedirect();
-
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-
-        $this->assertSame('L\'utilsateur n\'existe pas.', $crawler->filter('div.alert-danger')->text());
-    }
-
-    public function testLoginFailPassword(): void
-    {
-
-        $crawler = $this->client->request('GET', '/login');
-
-        $form = $crawler->selectButton('Se connecter')->form();
-
-        $form['username'] = 'admin';
-        $form['password'] = 'azertyui';
-        $this->client->submit($form);
-
-        $crawler = $this->client->followRedirect();
-
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-
-        $this->assertSame('Mot de passe incorrect', $crawler->filter('div.alert-danger')->text());
-    }
-
-    public function tearDown(): void
-    {
-        $this->client = null;
-        $crawler = null;
-    }
-
 }

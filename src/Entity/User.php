@@ -32,6 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank(message="Vous devez saisir un mot de passe d'utilisateur.")
      */
     private $password;
 

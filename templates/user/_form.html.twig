@@ -1,9 +1,7 @@
 {{ form_label(form.username) }}
 {{ form_widget(form.username) }}
-{% if (app.request.attributes.get('_route') == "user_create"  or app.request.attributes.get('_route') == "user_register" ) %}
-    {{ form_label(form.password) }}
-    {{ form_widget(form.password) }}
-{% endif %}
+{{ form_label(form.password) }}
+{{ form_widget(form.password) }}
 {{ form_label(form.email) }}
 {{ form_widget(form.email) }}
 {% if (app.request.attributes.get('_route') == "user_create" or app.request.attributes.get('_route') == "user_edit" ) %}

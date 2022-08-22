@@ -14,7 +14,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login_check", name="login_check")
+     * @Route(path="/login_check", name="login_check",methods={"POST","GET"})
      */
     public function loginAction(AuthenticationUtils $authenticationUtils): Response
     {
@@ -26,7 +26,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/logout", name="logout")
+     * @Route(path="/logout", name="logout")
      */
     public function logout(): void
     {

@@ -40,14 +40,14 @@
             <div class="row">
                 {% if (app.request.attributes.get('_route') == "user_create" ) %}
                     <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
-                {% else %}
-                    <a href="{{ path('user_register') }}" class="btn btn-primary">S'inscrire</a>
                 {% endif %}
                 {% if app.user %}
                 <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
                 {% endif %}
-
-                {% if not app.user and 'login' != app.request.attributes.get('_route') %}
+                {% if not app.user and 'user_register' != app.request.attributes.get('_route')  %}
+                <a href="{{ path('user_register') }}" class="btn btn-primary">S'inscrire</a>
+                {% endif %}
+                {% if not app.user and 'login' != app.request.attributes.get('_route')  %}
                 <a href="{{ path('login_check') }}" class="btn btn-success">Se connecter</a>
                 {% endif %}
             </div>

@@ -1,40 +1,29 @@
 <?php
 
-
 namespace App\Tests\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultControllerTest extends WebTestCase
 {
     private $client;
 
-    protected function setUp(): void
-    {
-        $this->client = self::createClient();
-    }
-
-    public function testIndexActionDisconnect(): void
+    public function setUp(): void
     {
         $this->client = static::createClient();
-
-        $this->client->request('GET', '/');
-
-        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
-
-        $crawler = $this->client->followRedirect();
-
-        $this->assertEquals(1, $crawler->filter('input[name="username"]')->count());
-        $this->assertEquals(1, $crawler->filter('input[name="password"]')->count());
-        $this->assertEquals(1, $crawler->filter('input[name="_csrf_token"]')->count());
-
     }
 
-    public function tearDown(): void
+    public function testHomepage()
     {
-        $this->client = null;
-        $crawler = null;
+        $this->client->request('GET', '/');
+        $this->assertResponseStatusCodeSame(200, Response::HTTP_OK);
     }
 
+    public function test404WhenFakeLink()
+    {
+        // Assert that not existing route return 404
+        $this->client->request('GET', '/-1');
+        static::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
 }
