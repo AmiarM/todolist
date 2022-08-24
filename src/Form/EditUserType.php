@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class EditUserType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options = []): void
     {
         $builder
             ->add('username', TextType::class, ['label' => "Nom d'utilisateur"])
