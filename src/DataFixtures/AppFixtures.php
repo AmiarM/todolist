@@ -42,6 +42,18 @@ class AppFixtures extends Fixture
                 $manager->persist($task);
             }
         }
+        $anonymous = new User();
+        $anonymous->setUsername("anonyme")
+            ->setPassword("")
+            ->setEmail('');
+        $task2 = new Task();
+        for ($t = 0; $t < 5; $t++) {
+            $task = new Task();
+            $task->setTitle($faker->word(2))
+                ->setContent($faker->paragraph())
+                ->setUser($anonymous);
+            $manager->persist($task);
+        }
         $manager->flush();
     }
 }

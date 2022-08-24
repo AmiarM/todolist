@@ -29,25 +29,19 @@ class UserController extends AbstractController
      * @var UserRepository
      */
     private $repository;
-    /**
-     *
-     * @var AuthorizationCheckerInterface
-     */
-    private $checker;
 
-    public function __construct(AuthorizationCheckerInterface $checker, EntityManagerInterface $manager, UserRepository $repository)
+    public function __construct(EntityManagerInterface $manager, UserRepository $repository)
     {
         $this->manager = $manager;
         $this->repository = $repository;
-        $this->checker = $checker;
     }
     /**
      * @Route(path="/users", name="user_list")
      */
-    public function listAction(AuthorizationCheckerInterface $checker, PaginatorInterface $paginator, Request $request)
+    public function listAction(PaginatorInterface $paginator, Request $request)
     {
         $user = $this->getUser();
-        if (!$this->getUser()) {
+        if (!$user) {
             return new JsonResponse(['error' => 'access denieded'], Response::HTTP_UNAUTHORIZED);
         }
         $users = $this->repository->findAll();
@@ -86,7 +80,7 @@ class UserController extends AbstractController
     /**
      * @Route(path="/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request, UserPasswordHasherInterface $encoder)
+    public function editAction(User $user, Request $request)
     {
         if (!$this->getUser()) {
             return new JsonResponse(['error' => 'access denieded'], Response::HTTP_UNAUTHORIZED);

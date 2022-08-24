@@ -82,7 +82,7 @@ class TaskController extends AbstractController
     /**
      * @Route(path="/tasks/create", name="task_create")
      */
-    public function createAction(Request $request, EntityManagerInterface $em)
+    public function createAction(Request $request, EntityManagerInterface $manager)
     {
         /**
          * @var User
@@ -97,8 +97,8 @@ class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $task = $form->getData();
             $task->setUser($user);
-            $em->persist($task);
-            $em->flush();
+            $manager->persist($task);
+            $manager->flush();
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
             return $this->redirectToRoute('task_list_enabling_false');
         }
@@ -108,7 +108,7 @@ class TaskController extends AbstractController
     /**
      * @Route(path="/tasks/{id}/edit", name="task_edit")
      */
-    public function editAction(Task $task, Request $request, EntityManagerInterface $em)
+    public function editAction(Task $task, Request $request, EntityManagerInterface $manager)
     {
         $user = $this->getUser();
         if (!$user) {
@@ -118,7 +118,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $task = $form->getData();
-            $em->flush();
+            $manager->flush();
             $this->addFlash('success', 'La tâche a bien été modifiée.');
             return $this->redirectToRoute('task_list_enabling_false');
         }
@@ -152,14 +152,14 @@ class TaskController extends AbstractController
     /**
      * @Route(path="/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTaskAction(Task $task, EntityManagerInterface $em)
+    public function deleteTaskAction(Task $task, EntityManagerInterface $manager)
     {
         $user = $this->getUser();
         if (!$user) {
             throw new NotFoundHttpException("vous devez vous connecter pour acceder à la ressource");
         }
-        $em->remove($task);
-        $em->flush();
+        $manager->remove($task);
+        $manager->flush();
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list_enabling_false');
