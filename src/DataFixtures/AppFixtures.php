@@ -7,14 +7,13 @@ use App\Entity\Task;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
     private $hasher;
 
-    public function __construct(SluggerInterface $slugger, UserPasswordHasherInterface $hasher)
+    public function __construct(UserPasswordHasherInterface $hasher)
     {
         $this->hasher = $hasher;
     }

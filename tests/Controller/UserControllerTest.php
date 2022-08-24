@@ -14,11 +14,4 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', '/users');
         $this->assertResponseRedirects('/login_check');
     }
-
-    // public function testAdminRequireAdminRole()
-    // {
-    //     $client = static::createClient();
-    //     $client->request('GET', '/users');
-    //     $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-    // }
 }
