@@ -2,12 +2,15 @@
 
 namespace App\Tests\Controller;
 
+use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 
+
 class SecurityControllerTest extends  WebTestCase
 {
+    use FixturesTrait;
     public function testLoginWithBadCredentials()
     {
         $client = static::createClient();
@@ -23,6 +26,7 @@ class SecurityControllerTest extends  WebTestCase
     }
     public function testSuccessfullLogin()
     {
+        $this->loadFixtureFiles([__DIR__ . '/users.yaml']);
         $client = static::createClient();
         $client->request('POST', '/login_check', [
             'email' => 'admin@admin.com',

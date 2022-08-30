@@ -40,9 +40,9 @@ class TaskController extends AbstractController
     public function listEnablingTrueAction(AuthorizationCheckerInterface $checker, Request $request)
     {
         $user = $this->getUser();
-        if (!$user) {
-            throw new NotFoundHttpException("vous devez vous  connecter pour acceder à la ressource");
-        }
+        // if (!$user) {
+        //     throw new NotFoundHttpException("vous devez vous  connecter pour acceder à la ressource");
+        // }
         if ($checker->isGranted("ROLE_ADMIN")) {
             $tasks = $this->repository->findBy(['isDone' => false]);
             $pagination = $this->paginate($tasks, $request);
@@ -62,9 +62,9 @@ class TaskController extends AbstractController
     public function listEnablingFalseAction(AuthorizationCheckerInterface $checker, Request $request)
     {
         $user = $this->getUser();
-        if (!$user) {
-            throw new NotFoundHttpException("vous devez vous  connecter pour acceder à la ressource");
-        }
+        // if (!$user) {
+        //     throw new NotFoundHttpException("vous devez vous  connecter pour acceder à la ressource");
+        // }
         if ($checker->isGranted("ROLE_ADMIN")) {
             $tasks = $this->repository->findBy(['isDone' => true]);
             $pagination = $this->paginate($tasks, $request);
