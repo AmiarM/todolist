@@ -11,14 +11,16 @@ class DefaultControllerTest extends WebTestCase
 
     public function setUp(): void
     {
+        parent::setUp();
         $this->client = static::createClient();
     }
 
-    public function testHomepage()
-    {
-        $this->client->request('GET', '/');
-        $this->assertResponseStatusCodeSame(200, Response::HTTP_OK);
-    }
+    // public function testHomepage()
+    // {
+    //     $crawler = $this->client->request('GET', '/');
+    //     $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    //     $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+    // }
 
     public function test404WhenFakeLink()
     {

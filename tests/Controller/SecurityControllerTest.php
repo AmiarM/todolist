@@ -24,14 +24,4 @@ class SecurityControllerTest extends  WebTestCase
         $client->followRedirect();
         $this->assertSelectorExists('.alert.alert-danger');
     }
-    public function testSuccessfullLogin()
-    {
-        $this->loadFixtureFiles([__DIR__ . '/users.yaml']);
-        $client = static::createClient();
-        $client->request('POST', '/login_check', [
-            'email' => 'admin@admin.com',
-            'password' => 'password'
-        ]);
-        $this->assertResponseRedirects('/');
-    }
 }

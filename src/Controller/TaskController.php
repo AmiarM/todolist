@@ -80,7 +80,7 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route(path="/tasks/create", name="task_create")
+     * @Route(path="/tasks/create", name="task_create",methods={"GET","POST"})
      */
     public function createAction(Request $request, EntityManagerInterface $manager)
     {
@@ -154,9 +154,18 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task, EntityManagerInterface $manager)
     {
-        $user = $this->getUser();
-        if (!$user) {
-            throw new NotFoundHttpException("vous devez vous connecter pour acceder à la ressource");
+        if ($this->getUser() !== $task->getUser()) {
+            if ($task->getUser()->getId() === -1) {
+                if (!$this->isGranted('ROLE_ADMIN')) {
+                    $this->addFlash('error', 'Seul un admin peut supprimer une tâche de l\'utilisateur anonyme !');
+                    return $this->redirectToRoute('task_list');
+                }
+            }
+
+            if (!$this->isGranted('ROLE_ADMIN')) {
+                $this->addFlash('error', 'Seul l\'auteur de la tâche ou un admin peut la supprimer !');
+                return $this->redirectToRoute('task_list');
+            }
         }
         $manager->remove($task);
         $manager->flush();
