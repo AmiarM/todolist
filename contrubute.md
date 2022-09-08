@@ -1,6 +1,6 @@
 ToDoList
 ========
-- lien fichier Git : https://github.com/AmiarM/todolist
+- lien fichier Git:https://github.com/AmiarM/todolist
 
 ### Avant propos
 Le projet fonctionne sur PHP 7.4.26
