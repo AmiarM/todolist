@@ -24,12 +24,13 @@ class UserControllerTest extends WebTestCase
         $this->client->request('GET', '/users');
         $this->assertResponseRedirects('/login_check');
     }
+
     public function loginWithAdmin(): void
     {
         $crawler = $this->client->request('GET', '/login_check');
         $buttonCrawlerMode = $crawler->filter('form');
         $form = $buttonCrawlerMode->form([
-            'email' => 'christiane56@hotmail.fr',
+            'email' => 'alex.bourgeois@wanadoo.fr',
             'password' => 'password'
         ]);
 
@@ -46,5 +47,41 @@ class UserControllerTest extends WebTestCase
         self::assertEquals(200, $this->client->getResponse()->getStatusCode());
         self::assertStringContainsString('Liste des utilisateurs', $crawler->filter('h1')->text());
         self::assertStringContainsString('Edit', $crawler->filter('a.btn.btn-success')->text());
+    }
+
+    public function testUserCreatePageAccess()
+    {
+        $this->loginWithAdmin();
+        $crawler = $this->client->request('GET', '/users/create');
+        self::assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    //Edit scenarii
+    public function testUserEditPageAccess()
+    {
+        $this->loginWithAdmin();
+        $crawler = $this->client->request('GET', '/users/14/edit');
+        self::assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testUserEditPageError404()
+    {
+        $this->loginWithAdmin();
+        $crawler = $this->client->request('GET', '/users/99999/edit');
+        $this->assertSame(404, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testUserCreation()
+    {
+        $this->loginWithAdmin();
+
+        $crawler = $this->client->request('POST', '/users/create');
+        $this->client->submitForm('Ajouter', [
+            'user[username]' => 'toto',
+            'user[password][first]' => 'toto',
+            'user[password][second]' => 'toto',
+            'user[email]' => 'toto@gmail.com',
+        ]);
+        self::assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }

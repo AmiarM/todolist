@@ -68,4 +68,20 @@ class TaskEntityTest extends KernelTestCase
         $task = $this->getTask();
         $this->assertSame('content', $task->getContent());
     }
+
+    public function testCreatedAt()
+    {
+        $task = $this->getTask();
+        $date = new \DateTime();
+        $task->setCreatedAt($date);
+        $this->assertSame($date, $task->getCreatedAt());
+    }
+
+
+    public function testUser()
+    {
+        $task = $this->getTask();
+        $task->setUser(new User());
+        $this->assertInstanceOf(User::class, $task->getUser());
+    }
 }

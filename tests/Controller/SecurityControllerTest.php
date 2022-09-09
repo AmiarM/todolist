@@ -11,17 +11,27 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 class SecurityControllerTest extends  WebTestCase
 {
     use FixturesTrait;
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->client = static::createClient();
+    }
     public function testLoginWithBadCredentials()
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/login_check');
+        $crawler = $this->client->request('GET', '/login_check');
         $form = $crawler->selectButton('Se connecter')->form([
             'email' => 'test@test.fr',
             'password' => 'fakepassword'
         ]);
-        $client->submit($form);
+        $this->client->submit($form);
         $this->assertResponseRedirects('/login_check');
-        $client->followRedirect();
+        $this->client->followRedirect();
         $this->assertSelectorExists('.alert.alert-danger');
+    }
+    public function testLogout()
+    {
+        $this->client->followRedirects();
+        $this->client->request('GET', '/logout');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }

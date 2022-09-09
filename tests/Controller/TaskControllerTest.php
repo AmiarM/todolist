@@ -58,7 +58,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->loginWithUser();
 
-        $crawler = $this->client->request('GET', '/tasks/1/edit');
+        $crawler = $this->client->request('GET', '/tasks/123/edit');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $crawler->selectButton('Modifier')->form();
@@ -78,7 +78,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->loginWithUser();
 
-        $this->client->request('GET', '/tasks/2/toggle');
+        $this->client->request('GET', '/tasks/123/toggle');
 
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
@@ -93,10 +93,16 @@ class TaskControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/login_check');
         $buttonCrawlerMode = $crawler->filter('form');
         $form = $buttonCrawlerMode->form([
-            'email' => 'marin.matthieu@richard.fr',
+            'email' => 'benjamin12@laposte.net',
             'password' => 'password'
         ]);
 
         $this->client->submit($form);
+    }
+    public function testTaskDeletePageError404()
+    {
+        $this->loginWithUser();
+        $crawler = $this->client->request('GET', '/tasks/9999999/delete');
+        $this->assertSame(404, $this->client->getResponse()->getStatusCode());
     }
 }

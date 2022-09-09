@@ -40,9 +40,6 @@ class TaskController extends AbstractController
     public function listEnablingTrueAction(AuthorizationCheckerInterface $checker, Request $request)
     {
         $user = $this->getUser();
-        // if (!$user) {
-        //     throw new NotFoundHttpException("vous devez vous  connecter pour acceder à la ressource");
-        // }
         if ($checker->isGranted("ROLE_ADMIN")) {
             $tasks = $this->repository->findBy(['isDone' => false]);
             $pagination = $this->paginate($tasks, $request);
@@ -62,9 +59,6 @@ class TaskController extends AbstractController
     public function listEnablingFalseAction(AuthorizationCheckerInterface $checker, Request $request)
     {
         $user = $this->getUser();
-        // if (!$user) {
-        //     throw new NotFoundHttpException("vous devez vous  connecter pour acceder à la ressource");
-        // }
         if ($checker->isGranted("ROLE_ADMIN")) {
             $tasks = $this->repository->findBy(['isDone' => true]);
             $pagination = $this->paginate($tasks, $request);
@@ -88,9 +82,6 @@ class TaskController extends AbstractController
          * @var User
          */
         $user = $this->getUser();
-        if (!$user) {
-            throw new NotFoundHttpException("vous devez vous connecter pour acceder à la ressource");
-        }
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
@@ -111,9 +102,6 @@ class TaskController extends AbstractController
     public function editAction(Task $task, Request $request, EntityManagerInterface $manager)
     {
         $user = $this->getUser();
-        if (!$user) {
-            throw new NotFoundHttpException("vous devez vous connecter pour acceder à la ressource");
-        }
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -135,9 +123,6 @@ class TaskController extends AbstractController
     public function toggleTaskAction(Task $task, EntityManagerInterface $manager)
     {
         $user = $this->getUser();
-        if (!$user) {
-            throw new NotFoundHttpException("vous devez vous connecter pour acceder à la ressource");
-        }
         $task->toggle(!$task->isDone());
         $manager->flush();
         if ($task->isDone() == false) {

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserType;
 use App\Form\EditUserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -40,10 +42,6 @@ class UserController extends AbstractController
      */
     public function listAction(PaginatorInterface $paginator, Request $request)
     {
-        $user = $this->getUser();
-        if (!$user) {
-            return new JsonResponse(['error' => 'access denieded'], Response::HTTP_UNAUTHORIZED);
-        }
         $users = $this->repository->findAll();
         $pagination = $paginator->paginate(
             $users, /* query NOT result */
@@ -58,14 +56,12 @@ class UserController extends AbstractController
     /**
      * @Route(path="/users/create", name="user_create")
      */
-    public function createAction(Request $request, UserPasswordHasherInterface $encoder)
+    public function createAction(FormFactoryInterface $formFactory, Request $request, UserPasswordHasherInterface $encoder)
     {
-        if (!$this->getUser()) {
-            return new JsonResponse(['error' => 'access denieded'], Response::HTTP_UNAUTHORIZED);
-        }
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+        $form = $formFactory->createNamed('user', UserType::class, $user);
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $encoder->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
@@ -80,13 +76,11 @@ class UserController extends AbstractController
     /**
      * @Route(path="/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request)
+    public function editAction(User $user, Request $request, FormFactoryInterface $formFactory)
     {
-        if (!$this->getUser()) {
-            return new JsonResponse(['error' => 'access denieded'], Response::HTTP_UNAUTHORIZED);
-        }
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
+        $form = $formFactory->createNamed('user', UserType::class, $user);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $this->manager->persist($user);

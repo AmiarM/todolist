@@ -54,4 +54,37 @@ class UserEntityTest extends KernelTestCase
         $user->setEmail("1aaa123");
         $this->assertHasErrors($user, 1);
     }
+
+
+    public function testEraseCredential()
+    {
+        $user = $this->getCurrentUser();
+        static::assertSame(null, $user->eraseCredentials());
+    }
+    public function testRoles(): void
+    {
+        $user = $this->getCurrentUser();
+        $user->setRoles(['ROLE_USER']);
+        $this->assertSame(['ROLE_USER'], $user->getRoles());
+    }
+
+    public function testRemoveTask()
+    {
+        $user = new User();
+        $task = new Task();
+        $user->addTask($task);
+        $user->removeTask($task);
+        $result = $user;
+
+        $this->assertSame($user, $result);
+    }
+
+    public function testGetTasks()
+    {
+        $user = new User();
+        $task = new Task();
+        $user->addTask($task);
+
+        $this->assertSame($task, $user->getTasks()[0]);
+    }
 }
