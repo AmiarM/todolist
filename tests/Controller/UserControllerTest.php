@@ -30,7 +30,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/login_check');
         $buttonCrawlerMode = $crawler->filter('form');
         $form = $buttonCrawlerMode->form([
-            'email' => 'alex.bourgeois@wanadoo.fr',
+            'email' => 'charrier.lucas@labbe.com',
             'password' => 'password'
         ]);
 
@@ -60,9 +60,20 @@ class UserControllerTest extends WebTestCase
     public function testUserEditPageAccess()
     {
         $this->loginWithAdmin();
-        $crawler = $this->client->request('GET', '/users/14/edit');
+        $crawler = $this->client->request('GET', '/users/2/edit');
         self::assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
+
+    public function testTaskDelete()
+    {
+        $this->loginWithAdmin();
+        $this->client->request('GET', '/tasks/13/delete');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->assertResponseRedirects('/tasks');
+        $this->client->followRedirect();
+        $this->assertSelectorExists('.alert-success');
+    }
+
 
     public function testUserEditPageError404()
     {
@@ -83,5 +94,22 @@ class UserControllerTest extends WebTestCase
             'user[email]' => 'toto@gmail.com',
         ]);
         self::assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+    public function testUserEdit()
+    {
+        $this->loginWithAdmin();
+        $crawler = $this->client->request('GET', '/users/3/edit');
+        $form = $crawler->selectButton('modifier')->form([
+            'user[username]' => "Deuf",
+            'user[email]' => "toto@gmail.com",
+            'user[password][first]' => "john",
+            'user[password][second]' => "john",
+            //'user[roles]' => "ROLE_ADMIN"
+        ]);
+
+        $this->client->submit($form);
+        $this->assertResponseRedirects('/users');
+        //$this->client->followRedirect();
+        $this->assertSelectorExists('.alert-success');
     }
 }

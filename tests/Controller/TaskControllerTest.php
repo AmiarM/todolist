@@ -21,6 +21,15 @@ class TaskControllerTest extends WebTestCase
         $this->client->request('GET', '/tasks');
         $this->assertResponseRedirects('/login_check');
     }
+    // public function testTaskDelete()
+    // {
+    //     $this->loginWithUser();
+    //     $this->client->request('GET', '/tasks/6/delete');
+    //     $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+    //     $this->assertResponseRedirects('/tasks');
+    //     $this->client->followRedirect();
+    //     $this->assertSelectorExists('.alert-success');
+    // }
 
     //------------------------------------------------------------------------
     public function testListAction()
@@ -58,7 +67,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->loginWithUser();
 
-        $crawler = $this->client->request('GET', '/tasks/123/edit');
+        $crawler = $this->client->request('GET', '/tasks/2/edit');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $crawler->selectButton('Modifier')->form();
@@ -78,7 +87,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->loginWithUser();
 
-        $this->client->request('GET', '/tasks/123/toggle');
+        $this->client->request('GET', '/tasks/2/toggle');
 
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
@@ -93,7 +102,7 @@ class TaskControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/login_check');
         $buttonCrawlerMode = $crawler->filter('form');
         $form = $buttonCrawlerMode->form([
-            'email' => 'benjamin12@laposte.net',
+            'email' => 'anais.lenoir@laposte.net',
             'password' => 'password'
         ]);
 
